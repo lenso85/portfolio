@@ -1,6 +1,7 @@
-import React from 'react';
-import heroImage from '../../assets/lense.png';
-import cvFile from '../../assets/CV.pdf';
+import React from "react";
+import { Link } from "react-router-dom";
+import heroImage from "../../assets/lense.png";
+import cvFile from "../../assets/CV.pdf";
 
 const Hero = () => {
     return (
@@ -8,7 +9,7 @@ const Hero = () => {
             id="home"
             className="min-h-screen max-w-[1200px] mx-auto flex items-center relative overflow-hidden"
         >
-            <div className="container mx-auto px-14 py-12 mt-14 relative z-10">
+                <div className="container mx-auto px-14 py-12 relative z-10">
 
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-30">
 
@@ -92,8 +93,8 @@ const Hero = () => {
                             </a>
 
                            
-                            <a
-                                href="#contact"
+                            <Link
+                                to="/contact"
                                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full border-2 border-red-600 dark:border-red-500 font-semibold text-red-600 dark:text-red-400 hover:bg-red-600 hover:text-white dark:hover:bg-red-500 dark:hover:text-white transition-all duration-300 transform hover:scale-105"
                             >
                                 <svg
@@ -111,7 +112,7 @@ const Hero = () => {
                                 </svg>
 
                                 Hire Me
-                            </a>
+                            </Link>
 
                         </div>
                     </div>

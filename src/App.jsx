@@ -6,6 +6,7 @@ import About from "./components/About/About";
 import Skills from "./components/Skills/Skills";
 import Services from "./components/Services/Services";
 import Contact from "./components/Contact/Contact";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -36,7 +37,11 @@ const App = () => {
       ],
     },
   ]);
-  return <RouterProvider router={router}/>
+  return (
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 };
 
 export default App;

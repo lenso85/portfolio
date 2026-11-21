@@ -1,92 +1,100 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
-import { GoHeartFill } from "react-icons/go";
-import { TbMenu2, TbMenu3 } from "react-icons/tb";
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { TbMenu2, TbMenu3, TbMoon, TbSun } from "react-icons/tb";
+import { NavLink, useLocation } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
+
+const links = [
+  { to: "/", label: "Home" },
+  { to: "/about", label: "About" },
+  { to: "/skills", label: "Skills" },
+  { to: "/services", label: "Services" },
+  { to: "/contact", label: "Contact" },
+];
+
+const linkClass = ({ isActive }) =>
+  `font-semibold tracking-wider hover:text-red-600 ${
+    isActive ? "text-red-600" : "text-zinc-800 dark:text-zinc-100"
+  }`;
+
 const Navbar = () => {
+  const [showMenu, setShowMenu] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { dark, toggle } = useTheme();
+  const location = useLocation();
 
-  const [showMenu, setShowMenu] =useState(false);
-  const [isScorolled,setIsScrolled] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const toggleMenu = () =>{
-    setShowMenu(!showMenu);
-  }
-
-  useEffect  (() =>{
-    const handleScroll =() =>{
-      setIsScrolled( window.scrollY > 10)
-    
-    }
-
-    window.addEventListener('scroll' ,handleScroll)
-
-
-
-  },[])
-
+  useEffect(() => {
+    setShowMenu(false);
+  }, [location.pathname]);
 
   return (
-    <header className= {`bg-white fixed top-0 left-0 right-0 z-50  ${ isScorolled ? 'drop-shadow-[0px_4px_25px_rgba(0,0,0,0.08)]' : ''}`}>
-    <nav className="max-w-[1200px] mx-auto px-10 md:h-[14vh] h-[12vh] flex  justify-between items-center">
-        <a href="#"  className='text-3xl font-bold '>
-          Le<span className='text-red-600 uppercase'>N</span>se
-        </a>
+    <header
+      className={`bg-white dark:bg-zinc-950 fixed top-0 left-0 right-0 z-50 ${
+        isScrolled ? "drop-shadow-[0px_4px_25px_rgba(0,0,0,0.08)]" : ""
+      }`}
+    >
+      <nav className="max-w-[1200px] mx-auto px-10 md:h-[14vh] h-[12vh] flex justify-between items-center">
+        <NavLink to="/" end className="text-3xl font-bold text-zinc-900 dark:text-white">
+          Le<span className="text-red-600 uppercase">N</span>se
+        </NavLink>
 
-        <ul className="md:flex item gap-x-15 hidden ml-100">
-          <li>
-            <NavLink to="/" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Home</NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/about" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>About</NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/skills" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Skills</NavLink>
-          </li>
-          <li>
-            <NavLink to="/services" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Services</NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Contact</NavLink>
-          </li>
+        <ul className="md:flex items-center gap-x-10 hidden">
+          {links.map((link) => (
+            <li key={link.to}>
+              <NavLink to={link.to} end={link.to === "/"} className={linkClass}>
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
-        
-        <div className='flex items-center gap-5'>
 
-            <a href="#" className='text-zinc-800 text-xl'><GoHeartFill /></a>
-             <a href="#" className='text-zinc-800 text-xl md:hidden' onClick={toggleMenu}>
-              {showMenu ? <TbMenu3 /> :<TbMenu2 />}
-            </a>
-        
+        <div className="flex items-center gap-5">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            className="text-zinc-800 dark:text-zinc-100 text-xl"
+          >
+            {dark ? <TbSun /> : <TbMoon />}
+          </button>
+          <button
+            type="button"
+            className="text-zinc-800 dark:text-zinc-100 text-xl md:hidden"
+            onClick={() => setShowMenu((open) => !open)}
+            aria-label={showMenu ? "Close menu" : "Open menu"}
+            aria-expanded={showMenu}
+          >
+            {showMenu ? <TbMenu3 /> : <TbMenu2 />}
+          </button>
         </div>
+
         <ul
-           className={`flex flex-col gap-y-12 bg-orange-500/15 w-80 backdrop-blur-xl shadow-xl rounded-xl p-10 items-center gap-x-15 md:hidden absolute top-30 -left-full transform -translate-x-1/2 transition-all duration-500  ${
-          showMenu ? "left-1/2" : ""
-            }`}
->
-          <li>
-            <NavLink to="/" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Home</NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/about" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>About</NavLink>
-          </li>
-
-          <li>
-            <NavLink to="/skills" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Skills</NavLink>
-          </li>
-          <li>
-            <NavLink to="/services" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Services</NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact" className='font-semibold tracking-wider text-zinc-800 hover:text-red-600'>Contact</NavLink>
-          </li>
+          className={`flex flex-col gap-y-8 bg-orange-500/15 dark:bg-zinc-900/95 w-80 backdrop-blur-xl shadow-xl rounded-xl p-10 items-center md:hidden absolute top-24 left-1/2 -translate-x-1/2 transition-all duration-500 ${
+            showMenu ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+          }`}
+        >
+          {links.map((link) => (
+            <li key={link.to}>
+              <NavLink
+                to={link.to}
+                end={link.to === "/"}
+                className={linkClass}
+                onClick={() => setShowMenu(false)}
+              >
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
-
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
